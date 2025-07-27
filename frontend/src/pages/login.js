@@ -26,7 +26,7 @@ export default function Login() {
     }
     setErrors({});
     try {
-      const { data } = await api.post('/login', { email, password });
+      const { data } = await api.post('/api/login', { email, password });
       localStorage.setItem('token', data.token);
       router.push('/dashboard');
     } catch (err) {

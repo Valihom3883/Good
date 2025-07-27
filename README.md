@@ -1,6 +1,6 @@
-# RoboVestX Backend
+# RoboVestX
 
-This is the backend for the RoboVestX platform. It is built with Node.js, Express, and MongoDB.
+This is the unified repository for the RoboVestX platform, containing both the frontend and backend.
 
 ## Getting Started
 
@@ -10,11 +10,11 @@ This is the backend for the RoboVestX platform. It is built with Node.js, Expres
     ```
 2.  **Install dependencies:**
     ```bash
-    cd backend
+    cd robovestx
     npm install
     ```
 3.  **Set up environment variables:**
-    Create a `.env` file in the `backend` directory and add the following:
+    Create a `.env.local` file in the root directory and add the following:
     ```
     MONGO_URI=your_mongodb_connection_string
     JWT_SECRET=your_jwt_secret
@@ -25,16 +25,20 @@ This is the backend for the RoboVestX platform. It is built with Node.js, Expres
     ```
 5.  **Start the server:**
     ```bash
-    npm start
+    npm run dev
     ```
 
-## API Documentation
+The application will be available at `http://localhost:3000`.
 
-The API documentation is available at `http://localhost:5000/api-docs` when the server is running.
+## API
+
+The backend API is served from the `/api` route within the Next.js application.
 
 ## Available Scripts
 
--   `npm start`: Starts the server in production mode.
--   `npm run dev`: Starts the server in development mode with nodemon.
+-   `npm run dev`: Starts the development server.
+-   `npm run build`: Builds the application for production.
+-   `npm run start`: Starts the production server.
+-   `npm run lint`: Lints the code.
 -   `npm run data:import`: Imports data into the database.
 -   `npm run data:destroy`: Destroys all data in the database.

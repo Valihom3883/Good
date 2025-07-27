@@ -21,8 +21,8 @@ const Investments = () => {
     const fetchData = async () => {
       try {
         const [plansRes, investmentsRes] = await Promise.all([
-          api.get('/investment-plans'),
-          api.get('/portfolio'),
+          api.get('/api/investment-plans'),
+          api.get('/api/portfolio'),
         ]);
         setPlans(plansRes.data);
         setInvestments(investmentsRes.data);
@@ -36,7 +36,7 @@ const Investments = () => {
   const handleInvest = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/invest', { planId: selectedPlan, amount });
+      await api.post('/api/invest', { planId: selectedPlan, amount });
       // You might want to update the UI to reflect the change
     } catch (error) {
       console.error(error);

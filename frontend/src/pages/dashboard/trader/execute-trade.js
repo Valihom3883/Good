@@ -12,7 +12,7 @@ const ExecuteTrade = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/execute-trade', { asset, type, amount, entryPrice });
+      await api.post('/api/execute-trade', { asset, type, amount, entryPrice });
       // You might want to update the UI to reflect the change
     } catch (error) {
       console.error(error);

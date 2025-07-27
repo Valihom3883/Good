@@ -29,7 +29,7 @@ export default function Register() {
     }
     setErrors({});
     try {
-      const { data } = await api.post('/register', { username, email, password, role });
+      const { data } = await api.post('/api/register', { username, email, password, role });
       localStorage.setItem('token', data.token);
       router.push('/dashboard');
     } catch (err) {

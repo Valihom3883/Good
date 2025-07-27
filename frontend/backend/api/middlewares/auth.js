@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
 
-const protect = async (req, res, next) => {
+const protect = (handler) => async (req, res) => {
   let token;
 
   if (
@@ -15,31 +15,31 @@ const protect = async (req, res, next) => {
 
       req.user = await User.findById(decoded.id).select('-password');
 
-      next();
+      return handler(req, res);
     } catch (error) {
       console.error(error);
-      res.status(401).json({ message: 'Not authorized, token failed' });
+      return res.status(401).json({ message: 'Not authorized, token failed' });
     }
   }
 
   if (!token) {
-    res.status(401).json({ message: 'Not authorized, no token' });
+    return res.status(401).json({ message: 'Not authorized, no token' });
   }
 };
 
-const admin = (req, res, next) => {
+const admin = (handler) => async (req, res) => {
   if (req.user && req.user.role === 'admin') {
-    next();
+    return handler(req, res);
   } else {
-    res.status(401).json({ message: 'Not authorized as an admin' });
+    return res.status(401).json({ message: 'Not authorized as an admin' });
   }
 };
 
-const trader = (req, res, next) => {
+const trader = (handler) => async (req, res) => {
   if (req.user && req.user.role === 'trader') {
-    next();
+    return handler(req, res);
   } else {
-    res.status(401).json({ message: 'Not authorized as a trader' });
+    return res.status(401).json({ message: 'Not authorized as a trader' });
   }
 };
 

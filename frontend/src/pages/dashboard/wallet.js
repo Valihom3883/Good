@@ -15,8 +15,8 @@ const Wallet = () => {
     const fetchData = async () => {
       try {
         const [walletRes, transactionsRes] = await Promise.all([
-          api.get('/wallet'),
-          api.get('/transactions'), // Assuming a /transactions endpoint exists
+          api.get('/api/wallet'),
+          api.get('/api/transactions'), // Assuming a /transactions endpoint exists
         ]);
         setWallet(walletRes.data);
         setTransactions(transactionsRes.data);
@@ -31,11 +31,11 @@ const Wallet = () => {
     e.preventDefault();
     const promise = () => {
       if (action === 'deposit') {
-        return api.post('/deposit', { amount });
+        return api.post('/api/deposit', { amount });
       } else if (action === 'withdraw') {
-        return api.post('/withdraw-wallet', { amount });
+        return api.post('/api/withdraw-wallet', { amount });
       } else if (action === 'transfer') {
-        return api.post('/transfer', { amount, recipientEmail });
+        return api.post('/api/transfer', { amount, recipientEmail });
       }
     };
 

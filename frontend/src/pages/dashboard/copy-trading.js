@@ -9,7 +9,7 @@ const CopyTrading = () => {
   useEffect(() => {
     const fetchTraders = async () => {
       try {
-        const { data } = await api.get('/traders');
+        const { data } = await api.get('/api/traders');
         setTraders(data);
       } catch (error) {
         console.error(error);
@@ -20,7 +20,7 @@ const CopyTrading = () => {
 
   const handleCopy = async (traderId) => {
     try {
-      await api.post('/copy', { traderId });
+      await api.post('/api/copy', { traderId });
       // You might want to update the UI to reflect the change
     } catch (error) {
       console.error(error);
@@ -29,7 +29,7 @@ const CopyTrading = () => {
 
   const handleStopCopy = async (traderId) => {
     try {
-      await api.post('/stop-copy', { traderId });
+      await api.post('/api/stop-copy', { traderId });
       // You might want to update the UI to reflect the change
     } catch (error) {
       console.error(error);

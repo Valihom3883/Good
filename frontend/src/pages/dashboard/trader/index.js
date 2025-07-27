@@ -11,7 +11,7 @@ const TraderDashboard = () => {
     const fetchData = async () => {
       try {
         // Assuming an endpoint to get trader details
-        const traderRes = await api.get('/trader/profile');
+        const traderRes = await api.get('/api/trader/profile');
         setTrader(traderRes.data);
         setFollowers(traderRes.data.followers);
       } catch (error) {

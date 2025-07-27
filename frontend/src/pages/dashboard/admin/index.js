@@ -11,8 +11,8 @@ const AdminDashboard = () => {
     const fetchData = async () => {
       try {
         const [usersRes, kycRes] = await Promise.all([
-          api.get('/admin/users'),
-          api.get('/admin/kyc'),
+          api.get('/api/admin/users'),
+          api.get('/api/admin/kyc'),
         ]);
         setUsers(usersRes.data);
         setKycSubmissions(kycRes.data);
@@ -25,7 +25,7 @@ const AdminDashboard = () => {
 
   const handleBlockUser = async (userId) => {
     try {
-      await api.post('/admin/block-user', { userId });
+      await api.post('/api/admin/block-user', { userId });
       // You might want to update the UI to reflect the change
     } catch (error) {
       console.error(error);
@@ -34,7 +34,7 @@ const AdminDashboard = () => {
 
   const handleApproveKyc = async (userId, status) => {
     try {
-      await api.post('/admin/approve-kyc', { userId, status });
+      await api.post('/api/admin/approve-kyc', { userId, status });
       // You might want to update the UI to reflect the change
     } catch (error) {
       console.error(error);

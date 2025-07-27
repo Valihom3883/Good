@@ -14,9 +14,9 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [walletRes, investmentsRes, copiedTradersRes] = await Promise.all([
-          api.get('/wallet'),
-          api.get('/portfolio'),
-          api.get('/copied-trades'),
+          api.get('/api/wallet'),
+          api.get('/api/portfolio'),
+          api.get('/api/copied-trades'),
         ]);
         setWallet(walletRes.data);
         setInvestments(investmentsRes.data);
