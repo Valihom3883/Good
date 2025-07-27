@@ -5,6 +5,7 @@ const {
   deposit,
   withdraw,
   transfer,
+  getTransactions,
 } = require('../controllers/wallet');
 const { protect } = require('../middlewares/auth');
 
@@ -120,5 +121,21 @@ router.post('/withdraw-wallet', protect, withdraw);
  *         description: Server error
  */
 router.post('/transfer', protect, transfer);
+
+/**
+ * @swagger
+ * /transactions:
+ *   get:
+ *     summary: Get all transactions for a user
+ *     tags: [Wallet]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of transactions
+ *       500:
+ *         description: Server error
+ */
+router.get('/transactions', protect, getTransactions);
 
 module.exports = router;

@@ -6,6 +6,7 @@ const {
   stopCopyTrader,
   executeTrade,
   getCopiedTrades,
+  getTraderProfile,
 } = require('../controllers/trading');
 const { protect, trader } = require('../middlewares/auth');
 
@@ -140,5 +141,23 @@ router.post('/execute-trade', protect, trader, executeTrade);
  *         description: Server error
  */
 router.get('/copied-trades', protect, getCopiedTrades);
+
+/**
+ * @swagger
+ * /trader/profile:
+ *   get:
+ *     summary: Get trader profile
+ *     tags: [Trading]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Trader profile
+ *       404:
+ *         description: Trader not found
+ *       500:
+ *         description: Server error
+ */
+router.get('/trader/profile', protect, trader, getTraderProfile);
 
 module.exports = router;

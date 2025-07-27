@@ -119,10 +119,26 @@ const getCopiedTrades = async (req, res) => {
 };
 
 
+// @desc    Get trader profile
+// @route   GET /api/trader/profile
+// @access  Private/Trader
+const getTraderProfile = async (req, res) => {
+  try {
+    const trader = await Trader.findOne({ user: req.user.id }).populate('user', 'username email');
+    if (!trader) {
+      return res.status(404).json({ message: 'Trader not found' });
+    }
+    res.json(trader);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getTraders,
   copyTrader,
   stopCopyTrader,
   executeTrade,
   getCopiedTrades,
+  getTraderProfile,
 };

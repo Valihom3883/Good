@@ -111,9 +111,24 @@ const transfer = async (req, res) => {
   }
 };
 
+// @desc    Get all transactions for a user
+// @route   GET /api/transactions
+// @access  Private
+const getTransactions = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const wallet = await Wallet.findOne({ user: userId });
+    const transactions = await Transaction.find({ wallet: wallet._id });
+    res.json(transactions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getWallet,
   deposit,
   withdraw,
   transfer,
+  getTransactions,
 };
