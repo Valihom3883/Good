@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
 import Input from '../components/Input';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ export default function Register() {
   const [role, setRole] = useState('user');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
   const router = useRouter();
 
   const validate = () => {
@@ -39,8 +40,8 @@ export default function Register() {
     setErrors({});
     setLoading(true);
     try {
-      const { data } = await api.post('/api/register', { username, email, password, role });
-      localStorage.setItem('token', data.token);
+      await api.post('/api/register', { username, email, password, role });
+      await login({ email, password });
       router.push('/dashboard');
     } catch (err) {
       setErrors({ form: err.response?.data?.message || 'An error occurred. Please try again.' });

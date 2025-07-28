@@ -1,13 +1,22 @@
-import { useState } from 'react';
-import withTrader from '../../../utils/withTrader';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../../context/AuthContext';
+import { useRouter } from 'next/router';
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import api from '../../../services/api';
 
 const ExecuteTrade = () => {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [asset, setAsset] = useState('');
   const [type, setType] = useState('buy');
   const [amount, setAmount] = useState(0);
   const [entryPrice, setEntryPrice] = useState(0);
+
+  useEffect(() => {
+    if (!authLoading && (!user || user.role !== 'trader')) {
+      router.push('/dashboard');
+    }
+  }, [user, authLoading, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +27,10 @@ const ExecuteTrade = () => {
       console.error(error);
     }
   };
+
+  if (authLoading) {
+    return <DashboardLayout>Loading...</DashboardLayout>;
+  }
 
   return (
     <DashboardLayout>
@@ -70,4 +83,4 @@ const ExecuteTrade = () => {
   );
 };
 
-export default withTrader(ExecuteTrade);
+export default ExecuteTrade;
