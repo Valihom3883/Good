@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useState } from 'react';
 import api from '../services/api';
 import { useRouter } from 'next/router';
 import Input from '../components/Input';

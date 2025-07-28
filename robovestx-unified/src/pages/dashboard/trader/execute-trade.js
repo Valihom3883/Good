@@ -52,7 +52,7 @@ const ExecuteTrade = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Entry Price</p>
+            <label className="block text-sm font-medium text-gray-700">Entry Price</label>
             <input
               type="number"
               value={entryPrice}
