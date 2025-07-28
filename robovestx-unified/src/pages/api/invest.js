@@ -2,6 +2,7 @@ import connectDB from '../../../backend/config/db';
 import Investment from '../../../backend/models/investment';
 import InvestmentPlan from '../../../backend/models/investmentPlan';
 import Wallet from '../../../backend/models/wallet';
+import logger from '../../../backend/config/logger';
 import { protect } from '../../../backend/api/middlewares/auth';
 
 connectDB();
@@ -40,7 +41,7 @@ async function handler(req, res) {
 
     res.status(201).json(investment);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
 

@@ -13,7 +13,7 @@ async function handler(req, res) {
     const investments = await Investment.find({}).populate('user', 'username email').populate('plan');
     res.json(investments);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
 

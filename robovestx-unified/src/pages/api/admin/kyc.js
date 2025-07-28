@@ -10,7 +10,7 @@ async function handler(req, res) {
       const users = await User.find({ 'kyc.status': 'pending' });
       res.json(users);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      logger.error(error.message); res.status(500).json({ message: 'Server Error' });
     }
   } else {
     res.status(405).json({ message: 'Method not allowed' });

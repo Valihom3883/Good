@@ -1,5 +1,6 @@
 import connectDB from '../../../backend/config/db';
 import User from '../../../backend/models/user';
+import logger from '../../../backend/config/logger';
 import { protect } from '../../../backend/api/middlewares/auth';
 
 connectDB();
@@ -17,7 +18,7 @@ async function handler(req, res) {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
 

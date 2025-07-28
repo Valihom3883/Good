@@ -1,5 +1,6 @@
 import connectDB from '../../../backend/config/db';
 import Wallet from '../../../backend/models/wallet';
+import logger from '../../../backend/config/logger';
 import { protect } from '../../../backend/api/middlewares/auth';
 
 connectDB();
@@ -18,7 +19,7 @@ async function handler(req, res) {
     }
     res.json(wallet);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
 

@@ -56,7 +56,7 @@ async function handler(req, res) {
 
     res.status(201).json(trade);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
 

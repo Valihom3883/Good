@@ -1,5 +1,6 @@
 import connectDB from '../../../backend/config/db';
 import Investment from '../../../backend/models/investment';
+import logger from '../../../backend/config/logger';
 import { protect } from '../../../backend/api/middlewares/auth';
 
 connectDB();
@@ -14,7 +15,7 @@ async function handler(req, res) {
     const investments = await Investment.find({ user: userId }).populate('plan');
     res.json(investments);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
 

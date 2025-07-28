@@ -19,7 +19,7 @@ async function handler(req, res) {
     await user.save();
     res.json({ message: `KYC status updated to ${status}` });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
 
