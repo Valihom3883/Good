@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
 import Input from '../components/Input';
 
@@ -7,6 +7,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const { login } = useAuth();
   const router = useRouter();
 
   const validate = () => {
@@ -25,8 +26,7 @@ export default function Login() {
     }
     setErrors({});
     try {
-      const { data } = await api.post('/api/login', { email, password });
-      localStorage.setItem('token', data.token);
+      await login({ email, password });
       router.push('/dashboard');
     } catch (err) {
       setErrors({ form: err.response.data.message });

@@ -1,31 +1,46 @@
 import { useEffect, useState } from 'react';
-import withAuth from '../../utils/withAuth';
+import { useAuth } from '../../context/AuthContext';
+import { useRouter } from 'next/router';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
+import Skeleton from '../../components/Skeleton';
 
 const Wallet = () => {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [wallet, setWallet] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [amount, setAmount] = useState(0);
   const [recipientEmail, setRecipientEmail] = useState('');
   const [action, setAction] = useState('deposit');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [walletRes, transactionsRes] = await Promise.all([
-          api.get('/api/wallet'),
-          api.get('/api/transactions'), // Assuming a /transactions endpoint exists
-        ]);
-        setWallet(walletRes.data);
-        setTransactions(transactionsRes.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
+
+  useEffect(() => {
+    if (user) {
+      const fetchData = async () => {
+        try {
+          const [walletRes, transactionsRes] = await Promise.all([
+            api.get('/api/wallet'),
+            api.get('/api/transactions'), // Assuming a /transactions endpoint exists
+          ]);
+          setWallet(walletRes.data);
+          setTransactions(transactionsRes.data);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }
+  }, [user]);
 
   const handleAction = async (e) => {
     e.preventDefault();
@@ -45,6 +60,22 @@ const Wallet = () => {
       error: 'An error occurred.',
     });
   };
+
+  if (authLoading || loading) {
+    return (
+      <DashboardLayout>
+        <h1 className="text-3xl font-bold mb-8">Wallet</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Skeleton className="h-32" />
+          <Skeleton className="h-64" />
+        </div>
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Transaction History</h2>
+          <Skeleton className="h-48" />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -111,4 +142,4 @@ const Wallet = () => {
   );
 };
 
-export default withAuth(Wallet);
+export default Wallet;

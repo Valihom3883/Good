@@ -1,27 +1,42 @@
-import withAdmin from '../../../utils/withAdmin';
-import DashboardLayout from '../../../layouts/DashboardLayout';
 import { useEffect, useState } from 'react';
+import { useAuth } from '../../../context/AuthContext';
+import { useRouter } from 'next/router';
+import DashboardLayout from '../../../layouts/DashboardLayout';
 import api from '../../../services/api';
+import Skeleton from '../../../components/Skeleton';
 
 const AdminDashboard = () => {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [users, setUsers] = useState([]);
   const [kycSubmissions, setKycSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [usersRes, kycRes] = await Promise.all([
-          api.get('/api/admin/users'),
-          api.get('/api/admin/kyc'),
-        ]);
-        setUsers(usersRes.data);
-        setKycSubmissions(kycRes.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+    if (!authLoading && (!user || user.role !== 'admin')) {
+      router.push('/dashboard');
+    }
+  }, [user, authLoading, router]);
+
+  useEffect(() => {
+    if (user) {
+      const fetchData = async () => {
+        try {
+          const [usersRes, kycRes] = await Promise.all([
+            api.get('/api/admin/users'),
+            api.get('/api/admin/kyc'),
+          ]);
+          setUsers(usersRes.data);
+          setKycSubmissions(kycRes.data);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }
+  }, [user]);
 
   const handleBlockUser = async (userId) => {
     try {
@@ -40,6 +55,22 @@ const AdminDashboard = () => {
       console.error(error);
     }
   };
+
+  if (authLoading || loading) {
+    return (
+      <DashboardLayout>
+        <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Users</h2>
+          <Skeleton className="h-64" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold mb-4">KYC Submissions</h2>
+          <Skeleton className="h-48" />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -105,4 +136,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default withAdmin(AdminDashboard);
+export default AdminDashboard;

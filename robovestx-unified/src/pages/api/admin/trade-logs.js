@@ -1,6 +1,6 @@
 import connectDB from '../../../../backend/config/db';
 import Trade from '../../../../backend/models/trade';
-import { protect, admin } from '../../../../backend/api/middlewares/auth';
+import { protect, role } from '../../../../backend/api/middlewares/auth';
 
 connectDB();
 
@@ -13,8 +13,8 @@ async function handler(req, res) {
     const trades = await Trade.find({}).populate('trader', 'user');
     res.json(trades);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
 
-export default protect(admin(handler));
+export default protect(role('admin')(handler));

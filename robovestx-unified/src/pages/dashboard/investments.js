@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react';
-import withAuth from '../../utils/withAuth';
+import { useAuth } from '../../context/AuthContext';
+import { useRouter } from 'next/router';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import api from '../../services/api';
 import InvestmentChart from '../../components/InvestmentChart';
+import Skeleton from '../../components/Skeleton';
 
 const Investments = () => {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [plans, setPlans] = useState([]);
   const [investments, setInvestments] = useState([]);
   const [amount, setAmount] = useState(0);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [loading, setLoading] = useState(true);
   const chartData = [
     { name: 'Jan', value: 400 },
     { name: 'Feb', value: 300 },
@@ -18,20 +23,30 @@ const Investments = () => {
   ];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [plansRes, investmentsRes] = await Promise.all([
-          api.get('/api/investment-plans'),
-          api.get('/api/portfolio'),
-        ]);
-        setPlans(plansRes.data);
-        setInvestments(investmentsRes.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
+
+  useEffect(() => {
+    if (user) {
+      const fetchData = async () => {
+        try {
+          const [plansRes, investmentsRes] = await Promise.all([
+            api.get('/api/investment-plans'),
+            api.get('/api/portfolio'),
+          ]);
+          setPlans(plansRes.data);
+          setInvestments(investmentsRes.data);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }
+  }, [user]);
 
   const handleInvest = async (e) => {
     e.preventDefault();
@@ -42,6 +57,30 @@ const Investments = () => {
       console.error(error);
     }
   };
+
+  if (authLoading || loading) {
+    return (
+      <DashboardLayout>
+        <h1 className="text-3xl font-bold mb-8">Investments</h1>
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Available Plans</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Skeleton className="h-48" />
+            <Skeleton className="h-48" />
+            <Skeleton className="h-48" />
+          </div>
+        </div>
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Investment Growth</h2>
+          <Skeleton className="h-72" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Your Investments</h2>
+          <Skeleton className="h-48" />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -112,4 +151,4 @@ const Investments = () => {
   );
 };
 
-export default withAuth(Investments);
+export default Investments;

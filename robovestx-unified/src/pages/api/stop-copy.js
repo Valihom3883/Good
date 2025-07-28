@@ -1,5 +1,6 @@
 import connectDB from '../../../backend/config/db';
 import Trader from '../../../backend/models/trader';
+import logger from '../../../backend/config/logger';
 import { protect } from '../../../backend/api/middlewares/auth';
 
 connectDB();
@@ -25,7 +26,7 @@ async function handler(req, res) {
 
     res.json({ message: 'Stopped copying trader' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
 

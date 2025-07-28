@@ -1,6 +1,6 @@
 import connectDB from '../../../../backend/config/db';
 import Trader from '../../../../backend/models/trader';
-import { protect, trader } from '../../../../backend/api/middlewares/auth';
+import { protect, role } from '../../../../backend/api/middlewares/auth';
 
 connectDB();
 
@@ -16,8 +16,8 @@ async function handler(req, res) {
     }
     res.json(trader);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
 
-export default protect(trader(handler));
+export default protect(role('trader')(handler));

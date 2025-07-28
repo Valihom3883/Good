@@ -1,19 +1,21 @@
 const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
 
+// Improved JWT verification with proper error handling
 const protect = (handler) => async (req, res) => {
   let token;
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
+  if (req.headers.authorization?.startsWith('Bearer')) {
     try {
       token = req.headers.authorization.split(' ')[1];
-
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+      // Fetch user with password excluded
       req.user = await User.findById(decoded.id).select('-password');
+
+      if (!req.user) {
+        return res.status(401).json({ message: 'User not found' });
+      }
 
       return handler(req, res);
     } catch (error) {
@@ -27,20 +29,14 @@ const protect = (handler) => async (req, res) => {
   }
 };
 
-const admin = (handler) => async (req, res) => {
-  if (req.user && req.user.role === 'admin') {
-    return handler(req, res);
-  } else {
-    return res.status(401).json({ message: 'Not authorized as an admin' });
+// Role-based middleware
+const role = (...roles) => (handler) => (req, res) => {
+  if (!roles.includes(req.user.role)) {
+    return res.status(403).json({
+      message: `User role ${req.user.role} is not authorized to access this route`
+    });
   }
+  return handler(req, res);
 };
 
-const trader = (handler) => async (req, res) => {
-  if (req.user && req.user.role === 'trader') {
-    return handler(req, res);
-  } else {
-    return res.status(401).json({ message: 'Not authorized as a trader' });
-  }
-};
-
-module.exports = { protect, admin, trader };
+module.exports = { protect, role };

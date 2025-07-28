@@ -29,6 +29,6 @@ export default async function handler(req, res) {
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
