@@ -7,11 +7,6 @@
   # This is the directory that contains the built site.
   publish = ".next"
 
-  # This tells Netlify to look inside the 'frontend' directory.
-  # If your package.json is in the root, you can remove this line.
-  # Based on our last discussion, it should be 'frontend'.
-  base = "frontend"
-
 [[plugins]]
   # This is the essential plugin for Next.js on Netlify.
   # It automatically handles server-side rendering, API routes, and more.
