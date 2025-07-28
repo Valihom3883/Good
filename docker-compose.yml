@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  auth-service:
+    build: ./backend/services/auth-service
+    ports:
+      - "5001:5000"
+  product-service:
+    build: ./backend/services/product-service
+    ports:
+      - "5002:5000"
+  order-service:
+    build: ./backend/services/order-service
+    ports:
+      - "5003:5000"
+  payment-service:
+    build: ./backend/services/payment-service
+    ports:
+      - "5004:5000"
+    environment:
+      - STRIPE_SECRET_KEY=your_stripe_secret_key
+  db:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/services/auth-service/db/schema.sql:/docker-entrypoint-initdb.d/01_auth_schema.sql
+      - ./backend/services/product-service/db/schema.sql:/docker-entrypoint-initdb.d/02_product_schema.sql
+      - ./backend/services/order-service/db/schema.sql:/docker-entrypoint-initdb.d/03_order_schema.sql
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=ecommerce
+
+volumes:
+  postgres_data:
