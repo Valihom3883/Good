@@ -1,4 +1,4 @@
-import swaggerJsdoc from 'swagger-jsdoc';
+const swaggerJsdoc = require('swagger-jsdoc');
 
 const options = {
   definition: {
@@ -6,26 +6,17 @@ const options = {
     info: {
       title: 'RoboVestX API',
       version: '1.0.0',
-      description: 'API for RoboVestX Copy Trading Platform',
+      description: 'API documentation for the RoboVestX platform.',
     },
     servers: [
       {
-        url: process.env.API_BASE_URL || 'http://localhost:5000/api',
+        url: 'http://localhost:5000/api',
       },
     ],
-    components: {
-      securitySchemes: {
-        BearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-        },
-      },
-    },
   },
-  apis: ['./backend/routes/*.js'],
+  apis: ['./src/api/routes/*.js'], // files containing annotations as above
 };
 
 const specs = swaggerJsdoc(options);
 
-export default specs;
+module.exports = specs;

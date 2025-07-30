@@ -50,9 +50,9 @@ router.post('/register', registerUser);
 
 /**
  * @swagger
- * /api/login:
+ * /login:
  *   post:
- *     summary: Authenticate a user
+ *     summary: Login a user
  *     tags: [Authentication]
  *     requestBody:
  *       required: true
@@ -66,22 +66,13 @@ router.post('/register', registerUser);
  *             properties:
  *               email:
  *                 type: string
- *                 format: email
  *               password:
  *                 type: string
- *                 format: password
  *     responses:
  *       200:
- *         description: Successful authentication
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
+ *         description: User logged in successfully
  *       401:
- *         description: Invalid credentials
+ *         description: Invalid email or password
  */
 router.post('/login', loginUser);
 

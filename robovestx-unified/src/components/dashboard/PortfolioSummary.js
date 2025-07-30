@@ -1,24 +1,23 @@
-import { Card, Metric, Text } from '@tremor/react';
+const StatCard = ({ title, value, change, isCurrency = true }) => (
+  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</h3>
+    <p className="text-3xl font-bold text-gray-900 dark:text-white">
+      {isCurrency ? `$${value.toFixed(2)}` : value}
+    </p>
+    {change && (
+      <p className={`text-sm ${change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+        {change >= 0 ? `+${change.toFixed(2)}%` : `${change.toFixed(2)}%`} vs last month
+      </p>
+    )}
+  </div>
+);
 
 export default function PortfolioSummary({ balance, profit, activeInvestments }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50">
-        <Text>Wallet Balance</Text>
-        <Metric>${balance.toFixed(2)}</Metric>
-      </Card>
-
-      <Card className="bg-gradient-to-r from-green-50 to-emerald-50">
-        <Text>Total Profit</Text>
-        <Metric className={profit >= 0 ? 'text-green-600' : 'text-red-600'}>
-          ${profit >= 0 ? '+' : ''}{profit.toFixed(2)}
-        </Metric>
-      </Card>
-
-      <Card className="bg-gradient-to-r from-purple-50 to-violet-50">
-        <Text>Active Investments</Text>
-        <Metric>{activeInvestments}</Metric>
-      </Card>
+      <StatCard title="Wallet Balance" value={balance} />
+      <StatCard title="Total Profit" value={profit} change={5.4} />
+      <StatCard title="Active Investments" value={activeInvestments} isCurrency={false} />
     </div>
   );
 }
