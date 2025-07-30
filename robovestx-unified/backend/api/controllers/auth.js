@@ -84,4 +84,50 @@ const generateToken = (id) => {
   });
 };
 
-module.exports = { registerUser, loginUser, getUserProfile };
+// Generate QR code for 2FA setup
+const setup2FA = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const otpauthUrl = user.enable2FA();
+    await user.save();
+
+    const qrCodeUrl = await QRCode.toDataURL(otpauthUrl);
+    res.json({ qrCodeUrl });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Verify 2FA token
+const verify2FA = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    const isValid = user.verify2FAToken(token);
+
+    if (isValid) {
+      user.isTwoFactorEnabled = true;
+      await user.save();
+      res.json({ message: '2FA enabled successfully' });
+    } else {
+      res.status(400).json({ message: 'Invalid token' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Middleware for 2FA verification
+const require2FA = async (req, res, next) => {
+  if (!req.user.isTwoFactorEnabled) return next();
+
+  if (req.session.twoFactorVerified) return next();
+
+  res.status(401).json({
+    message: 'Two-factor authentication required',
+    requires2FA: true
+  });
+};
+
+module.exports = { registerUser, loginUser, getUserProfile, setup2FA, verify2FA, require2FA };

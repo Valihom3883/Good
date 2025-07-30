@@ -28,4 +28,19 @@ UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
+UserSchema.methods.enable2FA = function() {
+  const secret = speakeasy.generateSecret({ length: 20 });
+  this.twoFactorSecret = secret.base32;
+  return secret.otpauth_url;
+};
+
+UserSchema.methods.verify2FAToken = function(token) {
+  return speakeasy.totp.verify({
+    secret: this.twoFactorSecret,
+    encoding: 'base32',
+    token,
+    window: 1
+  });
+};
+
 module.exports = mongoose.model('User', UserSchema);
