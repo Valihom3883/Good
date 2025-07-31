@@ -1,14 +1,12 @@
 [build]
-  command = "npm run build"
-  publish = ".next"
+  base = "frontend"
+  command = "npm run build-frontend"
+  publish = "frontend/.next"
 
 [build.environment]
   NODE_VERSION = "20.13.1"
+  BACKEND_URL = "https://your-backend-service.com"
   NODE_OPTIONS = "--max_old_space_size=4096"
-  NEXT_TELEMETRY_DISABLED = "1"
 
 [[plugins]]
-  package = "@netlify/plugin-nextjs@4.39.5"
-
-[context.production.environment]
-  NODE_ENV = "production"
+  package = "@netlify/plugin-nextjs"

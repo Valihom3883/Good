@@ -1,0 +1,14 @@
+{
+  "name": "robovestx-unified",
+  "scripts": {
+    "install-frontend": "cd frontend && npm install",
+    "build-frontend": "cd frontend && npm run build",
+    "start-backend": "cd backend && node server.js"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.3.2",
+    "winston": "^3.15.0",
+    "winston-daily-rotate-file": "^4.7.1"
+  }
+}
