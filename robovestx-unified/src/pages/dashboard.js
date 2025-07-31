@@ -23,10 +23,8 @@ export default function Dashboard() {
       }
     };
 
-    if (user) {
-      fetchData();
-    }
-  }, [user]);
+    fetchData();
+  }, []);
 
   return (
     <DashboardLayout>
