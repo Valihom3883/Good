@@ -1,4 +1,4 @@
-import dbConnect from '../../../backend/config/dbConnect';
+import dbConnect from '../../lib/dbConnect';
 import Wallet from '../../../backend/models/wallet';
 import Investment from '../../../backend/models/investment';
 import Trade from '../../../backend/models/trade';
