@@ -1,7 +1,7 @@
-import connectDB from '../../../backend/config/db';
-import Trader from '../../../backend/models/trader';
-import logger from '../../../backend/config/logger';
-import { protect } from '../../../backend/api/middlewares/auth';
+import connectDB from '@backend/config/db';
+import Trader from '@backend/models/trader';
+import logger from '@backend/config/logger';
+import { protect } from '@backend/api/middlewares/auth';
 
 connectDB();
 
@@ -31,3 +31,5 @@ async function handler(req, res) {
 }
 
 export default protect(handler);
+
+export const config = { runtime: "nodejs" };

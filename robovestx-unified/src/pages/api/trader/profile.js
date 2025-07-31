@@ -1,6 +1,6 @@
-import connectDB from '../../../../backend/config/db';
-import Trader from '../../../../backend/models/trader';
-import { protect, role } from '../../../../backend/api/middlewares/auth';
+import connectDB from '@backend/config/db';
+import Trader from '@backend/models/trader';
+import { protect, role } from '@backend/api/middlewares/auth';
 
 connectDB();
 
@@ -21,3 +21,5 @@ async function handler(req, res) {
 }
 
 export default protect(role('trader')(handler));
+
+export const config = { runtime: "nodejs" };

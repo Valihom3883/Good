@@ -1,5 +1,5 @@
-import connectDB from '../../../backend/config/db';
-import User from '../../../backend/models/user';
+import connectDB from '@backend/config/db';
+import User from '@backend/models/user';
 import jwt from 'jsonwebtoken';
 
 connectDB();
@@ -32,3 +32,5 @@ export default async function handler(req, res) {
     logger.error(error.message); res.status(500).json({ message: 'Server Error' });
   }
 }
+
+export const config = { runtime: "nodejs" };

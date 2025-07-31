@@ -1,10 +1,9 @@
-import connectDB from '../../../backend/config/db';
-import Wallet from '../../../backend/models/wallet';
-import Investment from '../../../backend/models/investment';
-import Trade from '../../../backend/models/trade';
-import logger from '../../../backend/config/logger';
-import { protect } from '../../../backend/api/middlewares/auth';
-import logger from '../../../backend/config/logger';
+import connectDB from '@backend/config/db';
+import Wallet from '@backend/models/wallet';
+import Investment from '@backend/models/investment';
+import Trade from '@backend/models/trade';
+import logger from '@backend/config/logger';
+import { protect } from '@backend/api/middlewares/auth';
 
 connectDB();
 
@@ -58,3 +57,5 @@ async function handler(req, res) {
 }
 
 export default protect(handler);
+
+export const config = { runtime: "nodejs" };

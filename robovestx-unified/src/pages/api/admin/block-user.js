@@ -1,6 +1,6 @@
-import connectDB from '../../../../backend/config/db';
-import User from '../../../../backend/models/user';
-import { protect, role } from '../../../../backend/api/middlewares/auth';
+import connectDB from '@backend/config/db';
+import User from '@backend/models/user';
+import { protect, role } from '@backend/api/middlewares/auth';
 
 connectDB();
 
@@ -24,3 +24,5 @@ async function handler(req, res) {
 }
 
 export default protect(role('admin')(handler));
+
+export const config = { runtime: "nodejs" };
